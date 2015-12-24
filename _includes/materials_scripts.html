@@ -1,0 +1,95 @@
+    <script src="/bom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.js" integrity="sha384-ElmwzE7FzyAry65Jg1uPbrsZXri0ASOjSLrQB56azraYclMS/AluGHanX5zL+U/d" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+    $(function() {
+      $('#fts-bom-pcbparts').hide();
+      $('#fts-bom-buildparts').hide();
+      $('#fts-bom-buildtools').hide();
+      $('#fts-case-details').hide();
+
+      bom('pcbparts');
+      bom('buildparts');
+      bom('buildtools');
+
+      indicateProgress($('#fts-total-total .spinner')[0]);
+
+      $('a.fts-expand').click(function(ev) {
+        ev.preventDefault();
+        if (!$('#' + $(this).attr('data-expand')).is(':visible')) {
+          $('#' + $(this).attr('data-expand')).show();
+          $(this).text('▼');
+        } else {
+          $('#' + $(this).attr('data-expand')).hide();
+          $(this).text('►');
+        }
+      });
+    });
+
+    // Adds download links next to each BOM when the page is loaded with the
+    // #debug fragment, e.g. https://freetserv.github.io/materials.html#debug
+    function updateDownloadLinks() {
+      if (window.location.hash !== '#debug') {
+        return;
+      }
+      $('.fts-bom-dl').each(function(idx, el) {
+        var jel = $(el);
+        var expand = jel.attr('data-expand');
+        var html = $('#' + expand).clone().show().prop('outerHTML');
+        jel.attr('href', 'data:application/html;charset=utf-8,' + encodeURI(html));
+        jel.attr('download', expand + '.html');
+        jel.text('(HTML)');
+      });
+      $('.fts-bom-dl-txt').each(function(idx, el) {
+        var jel = $(el);
+        var expand = jel.attr('data-expand');
+        var multiplier = parseInt($(this).parents('[data-multiplier]').attr('data-multiplier'), 10);
+        var txt = $.map(
+          $('#' + expand + ' tr[data-sku]'),
+          function(el) {
+            return (multiplier * $(el).attr('data-amount')) + ',' + $(el).attr('data-sku');
+          }).join('\n');
+        jel.attr('href', 'data:text/plain;charset=utf-8,' + encodeURI(txt));
+        jel.attr('download', expand + '.txt');
+        jel.text('(text)');
+      });
+    }
+
+    // TODO: ideally, we would do a currency conversion here. Are there public APIs?
+    function updateTotalPrice() {
+      var totals = {};
+      var re = /^([0-9.]+) (.+)$/;
+      $.each($('.fts-price[data-total]'), function(idx, el) {
+        var matches = $(el).attr('data-total').match(re);
+        var price = parseFloat(matches[1]);
+        var currency = matches[2];
+        if (totals[currency] === undefined) {
+          totals[currency] = price;
+        } else {
+          totals[currency] += price;
+        }
+      });
+      $('#fts-total-total')
+      .html(
+        '<span class="spinner"></span>' +
+        $.map(totals, function(price, currency) {
+          return price.toFixed(2) + ' ' + currency;
+        })
+        .join('<br>+ '));
+      if ($('tr[data-sku].fts-not-yet-loaded').size() > 0) {
+        indicateProgress($('#fts-total-total .spinner')[0]);
+      }
+    }
+
+    function indicateProgress(element) {
+      var spinnerOpts = {
+          scale: 0.5,
+          left: '20%',
+          lines: 9,
+          length: 8,
+          width: 3,
+          radius: 8,
+          corners: 1
+      };
+      new Spinner(spinnerOpts).spin(element);
+    }
+    </script>

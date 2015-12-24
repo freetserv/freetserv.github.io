@@ -1,0 +1,182 @@
+---
+layout: default
+menu-name: materials
+scripts: materials_scripts.html
+---
+
+    <div class="container" role="main">
+
+    <h1>Materials</h1>
+
+    <h2>freetserv</h2>
+
+    <p>
+    All prices exclude shipping costs and customs/import taxes.<br>
+    To provide an order of magnitude, shipping to Switzerland and import taxes added roughly 150 CHF to the bill.
+    </p>
+
+    <table class="table table-striped table-bordered fts-bom" width="100%">
+    <thead>
+    <tr>
+      <th>Item</th>
+      <th>Details</th>
+      <th>Vendor</th>
+      <th>Amount</th>
+      <th style="text-align: right">Price</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <tr id="fts-pcbparts" data-multiplier="4">
+      <td><a class="fts-expand" data-expand="fts-bom-pcbparts" href="#">►</a> Electronic components for freetserv PCBs <a class="fts-bom-dl" data-expand="fts-bom-pcbparts"></a> <a class="fts-bom-dl-txt" data-expand="fts-bom-pcbparts"></a></td>
+      <td><span class="glyphicon glyphicon-link" aria-hidden="true"></span> <a href="https://github.com/freetserv/freetserv/releases/download/v1.2/fts-bom-pcbparts.txt">csv file (BOM)</a> <span class="fts-filesize">1K</span></td>
+      <td><a href="https://www.digikey.com/">Digi-Key®</a></td>
+      <td>4</td>
+      <td class="fts-price fts-price-total" style="position: relative">≈ 290 USD<span class="spinner"></span></td>
+    </tr>
+
+{% include fts-bom-pcbparts.html %}
+
+    <tr id="fts-buildparts" data-multiplier="1">
+      <td><a class="fts-expand" data-expand="fts-bom-buildparts" href="#">►</a> Electronic components for a freetserv build <a class="fts-bom-dl" data-expand="fts-bom-buildparts"></a> <a class="fts-bom-dl-txt" data-expand="fts-bom-buildparts"></a></td>
+      <td><span class="glyphicon glyphicon-link" aria-hidden="true"></span> <a href="https://github.com/freetserv/freetserv/releases/download/v1.2/fts-bom-buildparts.txt">csv file (BOM)</a> <span class="fts-filesize">1K</span></td>
+      <td><a href="https://www.digikey.com/">Digi-Key®</a></td>
+      <td>1</td>
+      <td class="fts-price fts-price-total" style="position: relative">≈ 85 USD<span class="spinner"></span></td>
+    </tr>
+
+{% include fts-bom-buildparts.html %}
+
+    <tr id="fts-buildtools" data-multiplier="1">
+      <td><a class="fts-expand" data-expand="fts-bom-buildtools" href="#">►</a> Tools for a freetserv build <a class="fts-bom-dl" data-expand="fts-bom-buildtools"></a> <a class="fts-bom-dl-txt" data-expand="fts-bom-buildtools"></a></td>
+      <td><span class="glyphicon glyphicon-link" aria-hidden="true"></span> <a href="https://github.com/freetserv/freetserv/releases/download/v1.2/fts-bom-buildtools.txt">csv file (BOM)</a> <span class="fts-filesize">1K</span></td>
+      <td><a href="https://www.digikey.com/">Digi-Key®</a></td>
+      <td>1</td>
+      <td class="fts-price fts-price-total" style="position: relative">≈ 86 USD<span class="spinner"></span></td>
+    </tr>
+
+{% include fts-bom-buildtools.html %}
+
+    <tr>
+      <td><a class="fts-expand" data-expand="fts-case-details" href="#">►</a> Aluminum 1U rack-mountable case</td>
+      <td><span class="glyphicon glyphicon-download" aria-hidden="true"></span> <a href="https://github.com/freetserv/freetserv/releases/download/v1.2/case_schaeffer_ag.zip">fpd files</a> <span class="fts-filesize">2K</span></td>
+      <td><a href="https://www.schaeffer-ag.de/">Schaeffer AG</a></td>
+      <td>1</td>
+      <td class="fts-price" data-total="237.59 EUR">237.59 EUR</td>
+    </tr>
+
+    <tr id="fts-case-details">
+      <td colspan="5">
+      <p>
+      You’ll need to order the following parts in addition to the fpd files:
+      </p>
+      <ul>
+      <li>2 × GLGP1011 Seitenprofil 1, natur eloxiert, Länge: 170,0 mm</li>
+      <li>2 × GGMS1102 Montageset ISP/B3,0-ZI DIN 7982, weiß verzinkt (one for the side profiles, one for the housing brackets)</li>
+      <li>1 × GGWS0111 Gehäusewinkel (4 Stück), natur eloxiert</li>
+      </ul>
+      </td>
+    </tr>
+
+    <tr>
+      <td>Raspberry Pi 2 Model B V1.1</td>
+      <td><span class="glyphicon glyphicon-link" aria-hidden="true"></span> <a href="https://www.digitec.ch/de/s1/product/raspberry-pi-2-model-b-onboard-arm-cortex-a7-speziell-mainboard-3513615">article</a></td>
+      <td><a href="https://www.digitec.ch/">digitec</a></td>
+      <td>1</td>
+      <td class="fts-price" data-total="46.60 CHF">46.60 CHF</td>
+    </tr>
+
+    <tr>
+      <td>Sandisk Ultra microSDHC (16GB, Class 10)</td>
+      <td><span class="glyphicon glyphicon-link" aria-hidden="true"></span> <a href="https://www.digitec.ch/de/s1/product/sandisk-ultra-microsdhc-8gb-class-10-speicherkarte-2761387">article</a></td>
+      <td><a href="https://www.digitec.ch/">digitec</a></td>
+      <td>1</td>
+      <td class="fts-price" data-total="12.20 CHF">12.20 CHF</td>
+    </tr>
+
+    <tr>
+      <td>freetserv PCBs (<abbr title="A stencil is used for reflow soldering. Only if you are experienced with a reflow oven and have an appropriate stencil frame, it makes sense to also order a stencil.">without stencil</abbr>)</td>
+      <td><span class="glyphicon glyphicon-download" aria-hidden="true"></span> <a href="https://github.com/freetserv/freetserv/releases/download/v1.2/gerber_freetserv_smart_prototyping.zip">gerber files</a> <span class="fts-filesize">230K</span><br>
+      <span class="glyphicon glyphicon-link" aria-hidden="true"></span> <a href="http://smart-prototyping.com/Prototyping-Services/Electronic-Prototyping/PCB-Prototyping.html">order form</a></td>
+      <td><a href="http://smart-prototyping.com/Prototyping-Services/Electronic-Prototyping/PCB-Prototyping.html">smart-prototyping</a></td>
+      <td><abbr title="You need 4, but ordering 10 costs the same as ordering the minimum quantity of 5, and you will end up with a couple of spare PCBs in case something goes wrong.">10</abbr></td>
+      <td class="fts-price" data-total="11.90 USD">11.90 USD</td>
+    </tr>
+
+    <tr>
+      <td>freetserv LED PCB</td>
+      <td><span class="glyphicon glyphicon-download" aria-hidden="true"></span> <a href="https://github.com/freetserv/freetserv/releases/download/v1.2/gerber_led_smart_prototyping.zip">gerber files</a> <span class="fts-filesize">40K</span><br>
+      <span class="glyphicon glyphicon-link" aria-hidden="true"></span> <a href="http://smart-prototyping.com/Prototyping-Services/Electronic-Prototyping/PCB-Prototyping.html">order form</a></td>
+      <td><a href="http://smart-prototyping.com/Prototyping-Services/Electronic-Prototyping/PCB-Prototyping.html">smart-prototyping</a></td>
+      <td><abbr title="You need one, but the minimum order quantity is 5.">5</abbr></td>
+      <td class="fts-price" data-total="8.50 USD">8.50 USD</td>
+    </tr>
+
+    <tr>
+      <td>0.3m flat ribbon patch cord (UTP CAT6)</td>
+      <td><span class="glyphicon glyphicon-link" aria-hidden="true"></span> <a href="https://www.lindy-usa.com/Cat-6-ribbon-patch-cords-unshielded-black-0-3m-47520.html">article</a></td>
+      <td><a href="https://www.lindy-usa.com/">Lindy</a></td>
+      <td>1</td>
+      <td class="fts-price" data-total="1 USD">1 USD</td>
+    </tr>
+
+    <tr>
+    <td colspan="4">&nbsp;</td>
+    <td class="fts-price" id="fts-total-total" style="position: relative"><span class="spinner"></span>≈ 483 USD<br>
++ 237.59 EUR<br>
++ 58.8 CHF</td>
+    </tr>
+
+    </tbody>
+    </table>
+
+    <h2>Cables</h2>
+
+    <p>
+    In case you don’t happen to have a box full of Cisco console cables lying around, you’ll need to buy some in order to connect your freetserv with all the computers in your rack. Note that the crimp tool and connectors are used to adjust the length of the cables. You can skip this step if you don’t mind the resulting <a href="https://de.wikipedia.org/wiki/Kabelsalat">Kabelsalat</a>.
+    </p>
+
+    <table class="table table-striped table-bordered fts-bom" width="100%">
+    <thead>
+    <tr>
+      <th>Item</th>
+      <th>Details</th>
+      <th>Vendor</th>
+      <th>Amount</th>
+      <th style="text-align: right">Price</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <tr>
+      <td>Cisco <a href="http://www.cisco.com/c/en/us/td/docs/cable/cmts/ubr10012/installation/guide/hig/u10kcbl.html#pgfId-1006105">RJ-45-to-DB-9 Terminal Adapter</a> (40×1.5m, 10×3m)</td>
+      <td><span class="glyphicon glyphicon-link" aria-hidden="true"></span> <a href="http://www.aliexpress.com/item/1-5M-5ft-DB9F-DB9-Female-TO-RJ45-Rollover-Console-Cable/477621078.html">article</a></td>
+      <td><a href="http://www.aliexpress.com/">Aliexpress</a></td>
+      <td>50</td>
+      <td class="fts-price">154 USD</td>
+    </tr>
+
+    <tr>
+      <td>RJ45 Crimp Tool</td>
+      <td><span class="glyphicon glyphicon-link" aria-hidden="true"></span> <a href="https://www.lindy-usa.com/rj-45-crimp-tool-43208.html">article</a></td>
+      <td><a href="https://www.lindy-usa.com/">Lindy</a></td>
+      <td>1</td>
+      <td class="fts-price">19 USD</td>
+    </tr>
+
+    <tr>
+      <td>RJ45 Male Connector (8 Pin UTP CAT5e)</td>
+      <td><span class="glyphicon glyphicon-link" aria-hidden="true"></span> <a href="https://www.lindy-usa.com/rj-45-male-connector-8-pin-utp-cat5e-pack-of-10-62404.html">article</a></td>
+      <td><a href="https://www.lindy-usa.com/">Lindy</a></td>
+      <td>50</td>
+      <td class="fts-price">10 USD</td>
+    </tr>
+
+
+    </tbody>
+    </table>
+
+
+
+
+    </div>

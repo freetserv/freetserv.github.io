@@ -1,0 +1,5 @@
+{% if page.menu-name == include.name %}
+<li class="active"><a href="{{ include.url }}">{{ include.text }}</a></li>
+{% else %}
+<li><a href="{{ include.url }}">{{ include.text }}</a></li>
+{% endif %}

@@ -1,0 +1,373 @@
+---
+layout: default
+menu-name: assembly
+---
+
+    <div class="container fts-assembly">
+
+    <div class="row">
+    <div class="col-md-12">
+    <h1>Assembly</h1>
+
+<p class="bs-callout bs-callout-danger">
+This page isn’t quite complete yet! I’m still waiting for the LED PCBs and some screws to arrive before I can take better pictures and update the instructions. Regardless, the current state should help you get a good impression of what steps are necessary to assemble a freetserv.
+</p>
+
+
+<h2>Soldering and crimping</h2>
+
+<p>
+There are plenty of SMD soldering instructions discoverable on the internet, so
+I’m not going to repeat what you can learn from them. For example, <a
+href="https://www.youtube.com/watch?v=3NN7UGWYmBY">CuriousInventor’s Surface
+Mount Soldering 101</a> is a great video illustrating how to solder various
+parts of various sizes.
+</p>
+
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-md-7">
+<img src="images/pcbs.thumb.jpg" srcset="images/pcbs.thumb.2x.jpg 2x" width="525" style="border: 1px solid #c0c0c0">
+</div>
+<div class="col-md-5">
+<h3>Populate the freetserv PCBs</h3>
+
+<p class="bs-callout bs-callout-default">
+This step will take about 3 to 4 hours per PCB,<br>
+so plan for two full days of work.
+</p>
+
+<p>
+Start with the bottom side containing the FT4232 <abbr title="Integrated Circuit">IC</abbr>s. These are the ICs which have the smallest and the most pins, so after you have successfully soldered them on, it’s only going to get easier.
+</p>
+
+<p>
+This step has the highest part diversity, so neatly arrange the parts you are going to need. Finish the area around and on top of the FT4232 ICs by soldering each part on all three instances.
+</p>
+
+<p>
+Solder the remaining twelve MAX3232 ICs and their four 0.1μF capacitors each.
+</p>
+
+<p>
+Turn the board around and solder the parts from most complicated to easiest:
+</p>
+<ol>
+<li>ICs with tiny pins or many pins<br>(e.g. MCP16311, TUSB2046BVF)</li>
+<li>hard-to-reach capacitors and resistors</li>
+<li>all remaining surface-mount devices (SMD)</li>
+<li>all remaining through-hole devices<br>(e.g. the 8P8C ports)</li>
+</ol>
+
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-md-7">
+<img src="images/ethernet-extension.thumb.jpg" srcset="images/ethernet-extension.thumb.2x.jpg 2x" width="525" style="border: 1px solid #c0c0c0">
+</div>
+<div class="col-md-5">
+<h3>Connect the ethernet extension</h3>
+<p class="bs-callout bs-callout-warning">
+<a href="https://github.com/freetserv/freetserv/issues/26">Issue #26</a> tracks adding a pin header for the ethernet extension, which is a cleaner and simpler alternative than what’s currently described here. If you want to help, consider working on <a href="https://github.com/freetserv/freetserv/issues/26">issue #26</a>.
+</p>
+
+<p>
+Cut open an ethernet cable and strip the isolation off of the individual wires.
+</p>
+
+<p>
+The cable I have used seems to have come with a non-standard wiring, so I don’t have a good pin-out handy — sorry! You’ll need to use a multimeter to see which pin needs to be connected where.
+</p>
+
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-md-7">
+<strong>TODO: picture of the LED module</strong>
+</div>
+<div class="col-md-5">
+<h3>Populate the LED module</h3>
+
+<p>
+Solder the LEDs onto the PCB.
+</p>
+
+<p>
+For each of the two LEDs, solder the 3.3kΩ resistor to one of the LED’s pins (doesn’t matter which one), possibly cutting the pins of both the LED and the resistor beforehand to make the entire construction less bulky.
+</p>
+
+<p>
+Solder a cable to the other LED pin and to the resistor. Leave the cables unconnected for now, they will be used in the step “Crimp Raspberry Pi connector”.
+</p>
+
+<p>
+Isolate the construction using heat shrink tube.
+</p>
+
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-md-7">
+<!-- TODO: multiple images, like in ifixit -->
+<img src="images/psu-connection.thumb.jpg" srcset="images/psu-connection.thumb.2x.jpg 2x" width="525" style="border: 1px solid #c0c0c0">
+</div>
+<div class="col-md-5">
+<h3>Crimp mains power cable</h3>
+
+<p>
+For safety reasons, you must not solder wires that transfer 230V, as the solder could get hot enough to unsolder itself. Hence, the power supply uses <abbr title="Japan Solderless Terminals">JST</abbr> terminals, and on the power filter, we are using <a href="http://www.digikey.ch/product-search/de?keywords=A27817CT-ND">TE AMP quick connectors (Digi-Key A27817CT-ND)</a>.
+</p>
+
+<p>
+Cut the power cable to an appropriate length.
+</p>
+
+<p>
+Crimp one <a href="http://www.digikey.ch/product-search/de?keywords=455-1319-1-ND">JST SVH-41T-P1.1 (Digi-Key 455-1319-1-ND)</a> terminal onto each wire of the power cable. Then insert the terminals into the <a href="http://www.digikey.ch/product-search/de?keywords=455-1186-ND">JST VHR-5N (Digi-Key 455-1186-ND)</a> housing.
+</p>
+
+<p>
+As described in <a href="http://forums.parallax.com/discussion/117240/grossly-expensive-crimp-tools">a parallax forum post</a>, with the <a href="http://www.digikey.ch/product-search/de?keywords=WM9999-ND">Molex 63811-1000 (Digi-Key WM9999-ND)</a>, you can achieve an acceptable crimp. The “3.2mm insulation” slot of the Molex tool worked best for me.
+</p>
+
+<p>
+On the other end of the cable, which connects to the power filter, use the same <a href="http://www.digikey.ch/product-search/de?keywords=WM9999-ND">Molex 63811-1000 (Digi-Key WM9999-ND)</a> to crimp one <a href="http://www.digikey.ch/product-search/de?keywords=A27817CT-ND">TE AMP quick connector (Digi-Key A27817CT-ND)</a> onto each wire.
+</p>
+
+<strong>TODO: update for grounding the case using A119654-ND + 3 H767-ND washers underneath the PSU</strong>
+
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-md-7">
+<strong>TODO: cables for the fan</strong>
+</div>
+<div class="col-md-5">
+<h3>Crimp cable for the fan</h3>
+
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-md-7">
+<strong>TODO: raspberry pi connector pictures</strong>
+</div>
+<div class="col-md-5">
+<h3>Crimp Raspberry Pi connector (board, led module, psu)</h3>
+
+
+</div>
+</div>
+
+<hr>
+
+<h2>Putting it all together</h2>
+
+<hr>
+<div class="row">
+<div class="col-md-7">
+<img src="images/pcbs-in-frontplate.thumb.jpg" srcset="images/pcbs-in-frontplate.thumb.2x.jpg 2x" width="525" style="border: 1px solid #c0c0c0">
+</div>
+<div class="col-md-5">
+<h3>Mount the PCBs in the front plate</h3>
+
+<p>
+Start by pushing each single PCB individually into its corresponding front plate cutout. What worked well for me is to first insert the PCB with a slight angle, so that the 8P8C ports are touching the front plate cutout at the top and bottom. That holds the board in place pretty well, and then you can push the board into the cutout with a bit more force.
+</p>
+
+<p>
+After doing this once, it will be easier to insert the PCB afterwards, so you will have an easier time when inserting all 4 of them together (they are daisy-chained, so they need to be inserted together).
+</p>
+
+<p>
+To insert all PCBs, start by inserting the first one so that the 8P8C ports touch the front plate cutout at the top and bottom. Then, connect the next PCB’s daisy-chaining connector and also make its ports touch the cutout top/bottom. Repeat for the remaining two PCBs. You will have enough wiggle room to now correctly align the PCBs and push them into the front plate. In the next step, we will properly fasten them, finishing the alignment/insertion process.
+</p>
+</div>
+</div>
+
+<hr>
+<div class="row">
+<div class="col-md-7">
+<p>
+<img src="images/power-filter.thumb.jpg" srcset="images/power-filter.thumb.2x.jpg 2x" width="525">
+</p>
+</div>
+<div class="col-md-5">
+<h3>Install the power filter</h3>
+
+<p>
+Use two <a href="http://www.digikey.ch/product-search/de?keywords=36-29316-ND">16mm M3 screws (Digi-Key 36-29316-ND)</a> with two <a href="http://www.digikey.ch/product-search/de?keywords=36-4708-ND">M3 hex nuts (Digi-Key 36-4708-ND)</a> to fasten the power filter in the front plate.
+</p>
+
+<strong>TODO: update for better screws</strong>
+
+</div>
+</div>
+
+
+
+<hr>
+<div class="row">
+<div class="col-md-7">
+<img src="images/bottom-plate.thumb.jpg" srcset="images/bottom-plate.thumb.2x.jpg 2x" width="525">
+</div>
+<div class="col-md-5">
+<h3>Put bottom plate into front plate, screw in PCBs</h3>
+
+<p>
+The bottom plate is the only plate with threaded standoffs. Insert it into the front plate so that the 8 threaded standoffs for the PCBs are underneath the corresponding holes in the PCBs.
+</p>
+
+<p>
+Use the <a href="http://www.digikey.ch/product-search/de?keywords=335-1150-ND">4mm M3 Phillips screws (Digi-Key 335-1150-ND)</a> to fasten the PCBs. Don’t screw them in too tight yet — we’ll properly tighten them once the side profile and back plate are fastened.
+</p>
+
+</div>
+</div>
+
+<hr>
+<div class="row">
+<div class="col-md-7">
+</div>
+<div class="col-md-5">
+<h3>Install the LED board</h3>
+
+<p>
+Use two <a href="http://www.digikey.ch/product-search/de?keywords=335-1150-ND">4mm M3 Phillips screws (Digi-Key 335-1150-ND)</a> with one <a href="http://www.digikey.ch/product-search/de/hardware-fasteners-accessories/washers/2097338?k=H767-ND">M3 flat washer (Digi-Key H767-ND)</a> each to fasten the LED PCB. Since the board is symmetrical, pay attention that you plug it in the correct way around, i.e. matching the front plate LED labels.
+</p>
+
+</div>
+</div>
+
+<hr>
+<div class="row">
+<div class="col-md-7">
+<img src="images/top1.thumb.jpg" srcset="images/top1.thumb.2x.jpg 2x" width="525">
+</div>
+<div class="col-md-5">
+
+<h3>Install power supply and Raspberry Pi 2</h3>
+<p>
+Use the <a href="http://www.digikey.ch/product-search/de?keywords=335-1150-ND">4mm M3 Phillips screws (Digi-Key 335-1150-ND)</a> to fasten the power supply as illustrated in the picture on the left.
+</p>
+<p>
+Use the <a href="http://www.digikey.ch/product-search/de?keywords=36-29300-ND">M2.5 screws (Digi-Key 36-29300-ND)</a> to fasten the Raspberry Pi 2.
+</p>
+
+<p>
+Use a short USB-A to USB-micro-B cable, e.g. this <a href="http://www.digikey.ch/product-search/de?keywords=1175-1694-ND">0.5m right-angled USB-A to USB-micro-B (Digi-Key 1175-1694-ND)</a> cable, to connect the first freetserv PCB’s “HOST” port to any of the Raspberry Pi 2’s USB ports.
+</p>
+
+<p>
+Connect the ethernet extension cable to the Raspberry Pi 2’s ethernet port.
+</p>
+
+<p>
+Connect the Raspberry Pi connector module to the power supply and the freetserv PCB’s power connector.
+<br>
+<strong>TODO: highlight this in the picture</strong>
+</p>
+
+<p>
+TODO: connect PSU→rpi2
+TODO: connect rpi2 connector→[5V freetserv, led module]
+TODO: connect freetserv→led module
+</p>
+
+</div>
+</div>
+
+<hr>
+<div class="row">
+<div class="col-md-7">
+</div>
+<div class="col-md-5">
+<h3>Install the fan</h3>
+
+<p>
+Use four <a href="http://www.digikey.ch/product-search/de?keywords=36-29316-ND">16mm M3 screws (Digi-Key 36-29316-ND)</a> with four <a href="http://www.digikey.ch/product-search/de?keywords=36-4708-ND">M3 hex nuts (Digi-Key 36-4708-ND)</a> to fasten the fan in the back plate.
+</p>
+
+
+</div>
+</div>
+
+<hr>
+<div class="row">
+<div class="col-md-7">
+<img src="images/tighten.thumb.jpg" srcset="images/tighten.thumb.2x.jpg 2x" width="525"><br>
+<strong>TODO: better picture</strong>
+</div>
+<div class="col-md-5">
+<h3>Assemble case, tighten screws</h3>
+
+<p>
+Use the screws of the Schaeffer AG Montageset to screw the side profiles to the front plate, and to screw the back plate to the side profiles. Do not slide in the top plate just yet, so that you still have access to all components for the next step:
+</p>
+
+<p>
+Since all components are now in their final position, tighten all 
+<a href="http://www.digikey.ch/product-search/de?keywords=335-1150-ND">4mm M3 Phillips (Digi-Key 335-1150-ND)</a> and 
+<a href="http://www.digikey.ch/product-search/de?keywords=36-29300-ND">M2.5 screws (Digi-Key 36-29300-ND)</a>.
+</p>
+
+</p>
+
+</div>
+</div>
+
+<hr>
+<div class="row">
+<div class="col-md-7">
+</div>
+<div class="col-md-5">
+<h3>Functional testing</h3>
+
+<p>
+Now is a good time to perform functional tests if you haven’t already. Verify the following checklist:
+</p>
+
+<ul>
+<li>The power LED lights up as soon as you connect mains power.</li>
+<li>The watchdog LED blinks every other second as soon as the Raspberry Pi booted. See <a href="/software-setup.html">Software setup</a> if you haven’t installed the Raspberry Pi yet.</li>
+<li>You can establish an ethernet link when connecting to the <code>eth0</code> port.</li>
+<li>When logging into the Raspberry Pi, <code>/dev/ttyUSB0</code> to <code>/dev/ttyUSB47</code> are present.</li>
+<li>In the <code>dmesg</code> output, there are no USB errors. NOTE: issue https://github.com/freetserv/freetserv/issues/34</li>
+<li>The fan spins and blows air out of the case.</li>
+</ul>
+
+</div>
+</div>
+
+<hr>
+<div class="row">
+<div class="col-md-7">
+<img src="images/assembled.thumb.jpg" srcset="images/assembled.thumb.2x.jpg 2x" width="525"><br>
+</div>
+<div class="col-md-5">
+<h3>Assemble case with top plate</h3>
+
+<p>
+Unscrew and remove the back plate again.
+</p>
+
+<p>
+Screw the Schaeffer AG case brackets into the bottom and top plate.
+</p>
+
+<p>
+Slide in the top plate.
+</p>
+
+<p>
+Screw the back plate to the side profiles, screw all case brackets.
+</p>
+
+</div>
+</div>

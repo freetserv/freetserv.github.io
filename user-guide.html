@@ -1,0 +1,94 @@
+---
+layout: default
+menu-name: user-guide
+---
+
+    <div class="container">
+    <h1>freetserv User Guide</h1>
+
+    <h2>Finding the serial ports you have access to</h2>
+<p>
+Each freetserv port is available in <code>/dev/freetserv</code>, e.g. the first port is <code>/dev/freetserv/port1</code>.
+</p>
+
+<p>
+If you are not sure which ports you have access to, you can use <code>find(1)</code> to figure it out:
+</p>
+<pre>
+fts $ find -L /dev/freetserv -user $LOGNAME
+</pre>
+
+<p>
+It might be useful to create symbolic links with names that mean something to you, e.g.:
+</p>
+<pre>
+fts $ ln -s /dev/freetserv/port1 $HOME/hp-rack-switch
+</pre>
+
+    <h2>Using a serial port</h2>
+<p>
+Nowadays, devices with a serial port typically are configured as <a href="https://en.wikipedia.org/wiki/8-N-1">8-N-1</a> (8 data bits, no parity bit, one stop bit), which is also the default setting in all modern programs.
+</p>
+
+<p>
+What varies from device to device is the <a href="https://en.wikipedia.org/wiki/Baud">baudrate</a>. If you’re not sure which baudrate your device uses, chances are it’s using 9600 baud or 115200 baud, the most common baudrates encountered nowadays.
+</p>
+
+    <p>
+By default, freetserv comes with a number of programs that can all be used to connect to the device that is connected to your serial port:
+</p>
+
+<p>
+<a href="http://linux.die.net/man/1/screen">screen(1)</a> can configure a serial port, and you might already be familiar with it. Especially when dealing with multiple serial ports, switching between multiple screen windows can be handy. This is how you would invoke it:
+</p>
+<pre>
+fts $ screen /dev/freetserv/port3 9600
+</pre>
+
+<p>
+<a href="http://linux.die.net/man/1/minicom">minicom(1)</a> describes itself as a friendly serial communication program, and offers a menu-driven configuration in case you need to make adjustments to your serial port’s configuration:
+</p>
+<pre>
+fts $ minicom -D /dev/freetserv/port3 -b 9600
+</pre>
+
+<p>
+<a href="http://linux.die.net/man/1/cu">cu(1)</a> might suit you more than minicom if you prefer text commands over text menus:
+</p>
+<pre>
+fts $ cu -l /dev/freetserv/port3 -s 9600
+</pre>
+
+<h2>Restricting who can log in to your account</h2>
+
+<!-- TODO: patch OpenBSD’s src/usr.bin/mandoc/html.c to generate <a name="">
+     tags for each section so that direct links are possible. -->
+<p>
+You can configure OpenSSH to only accept logins from certain IP address ranges via the “from” keyword in your <code>~/.ssh/authorized_keys</code>, see the section “AUTHORIZED_KEYS FILE FORMAT” in the <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/sshd.8?query=sshd&sec=8">sshd(8) manpage</a>
+</p>
+
+<p>
+As an example:
+</p>
+<pre>
+fts $ cat ~/.ssh/authorized_keys
+from="192.0.2.23/32, 2001:db8::/64" ssh-rsa AA…
+</pre>
+
+<h2>Enabling the serial port on a Linux computer</h2>
+
+<p>
+As soon as you add <code>console=ttyS0</code> to your kernel boot parameters, the Linux kernel will log its boot messages and <a href="http://0pointer.de/blog/projects/serial-console.html">systemd will start a serial getty on ttyS0</a>. To retain boot messages on the regular text console as well, specify both <code>console=tty0</code> and <code>console=ttyS0</code>. The last mentioned device is the device that will control stdin/stdout/stderr, so set it to your serial port.
+</p>
+
+<p>
+Further, you should enable the serial port in the grub bootloader. Enabling both could look like this:
+</p>
+<pre>
+myserver # cat &gt;&gt;/etc/default/grub &lt;&lt;'EOT'
+GRUB_CMDLINE_LINUX_DEFAULT="console=tty1 console=ttyS0 panic=10"
+GRUB_TERMINAL="console serial"
+GRUB_SERIAL_COMMAND="serial --speed=115200 --unit=0 --word=8 --parity=no --stop=1"
+EOT
+myserver # update-grub
+</pre>

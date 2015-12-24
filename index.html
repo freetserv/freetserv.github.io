@@ -1,30 +1,77 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>freetserv</title>
+---
+layout: default
+menu-name: introduction
+---
 
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <div class="jumbotron">
+      <div class="container">
+        <h1>freetserv</h1>
+        <p>
+        An <a href="https://en.wikipedia.org/wiki/Open-source_hardware">open-source hardware</a> build-it-yourself device to<br>
+        remote-control up to 48 devices via their <a href="https://en.wikipedia.org/wiki/Serial_port">RS-232 serial port</a>.
+        </p>
+      </div>
+    </div>
 
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-      <script src="//oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="//oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-  </head>
-  <body>
-    <h1>freetserv</h1>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+        <h2>The hardware</h2>
+        <p>
+          There’s a <a href="https://en.wikipedia.org/wiki/Raspberry_Pi">Raspberry Pi</a> inside, so you can either follow our guide and run <a href="https://www.debian.org/">Debian GNU/Linux</a> on it, or install your favorite operating system on its powerful 900 MHz quad-core ARM processor.
+        </p>
 
-    This is a placeholder page until the actual content is ready.
+        <p>
+          freetserv uses the <a href="http://www.ftdichip.com/Products/ICs/FT4232H.htm">FT4232HL chip</a>, which is well-supported by Linux and BSD operating systems. No custom drivers are needed.
+        </p>
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-  </body>
-</html>
+        <p>
+          <a href="https://en.wikipedia.org/wiki/Pinout">Pinout</a>-wise, freetserv is compatible with the popular cisco console cables that you might already be familiar with.
+        </p>
+
+        <p>
+          The schematics and board layout are published under the <a href="https://en.wikipedia.org/wiki/CERN_Open_Hardware_License">CERN Open Hardware license</a>.
+        </p>
+        </div>
+
+        <div class="col-md-4">
+
+        <h2>Why use serial ports?</h2>
+
+        <p>
+          freetserv originated from a small server hosting colocation association where we share a <a href="https://en.wikipedia.org/wiki/19-inch_rack">19″ rack</a>; each member gets one unit.
+        </p>
+
+        <p>
+          Some devices like network switches or appliances come with a serial port and no other way to access them remotely.
+        </p>
+
+        <p>
+          Servers often have more modern remote management facilities like <a href="https://en.wikipedia.org/wiki/Intelligent_Platform_Management_Interface">IPMI</a>, but we weren’t too happy with that, no matter which server vendor we are talking about. Occasionally, the IPMI module would just crash (!) and need a reboot. Sometimes IPMI wasn’t reachable in early boot when you needed it most due to its network port sharing. And even when it works, it provides a huge attack surface.
+        </p>
+
+        <p>
+          In conclusion, some of our members prefer to turn off IPMI and use a good old serial port instead. Others take all the backup they can get and want to have both IPMI and serial port access.
+        </p>
+        </div>
+
+        <div class="col-md-4">
+        <h2>Getting started</h2>
+	<p>
+	If you’re a freetserv user, see <a href="/user-guide.html">the User Guide</a> for how to identify and use your serial ports.
+	</p>
+
+	<p>
+	If you’re a freetserv admin, <a href="/admin-guide.html">the Admin Guide</a> explains how to add users and assign ports.
+	</p>
+
+	<p>
+	Read <a href="/assembly.html">the Assembly instructions</a> to learn how to build a freetserv after you’ve bought <a href="/materials.html">the Materials</a>.
+	</p>
+
+	<p>
+	We also have <a href="https://goo.gl/photos/mjic4fa3yz9d6P7y8">a bunch of pictures</a> if you’re just curious.
+	</p>
+        </div>
+      </div>
+    </div>

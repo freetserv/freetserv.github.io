@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>freetserv: a free serial terminal server</title>
+    <meta name="keywords" content="free, terminal, server, freetserv, serial, port, rs232, rs, 232">
+    {% if page.noindex %}
+    <meta name="robots" content="noindex">
+    {% endif %}
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+    <style type="text/css">
+    .bs-callout {
+    padding: 20px;
+    margin: 20px 0;
+    border: 1px solid #eee;
+    border-left-width: 5px;
+    border-radius: 3px;
+}
+.bs-callout h4 {
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+.bs-callout p:last-child {
+    margin-bottom: 0;
+}
+.bs-callout code {
+    border-radius: 3px;
+}
+.bs-callout+.bs-callout {
+    margin-top: -5px;
+}
+.bs-callout-default {
+    border-left-color: #777;
+}
+.bs-callout-default h4 {
+    color: #777;
+}
+.bs-callout-primary {
+    border-left-color: #428bca;
+}
+.bs-callout-primary h4 {
+    color: #428bca;
+}
+.bs-callout-success {
+    border-left-color: #5cb85c;
+}
+.bs-callout-success h4 {
+    color: #5cb85c;
+}
+.bs-callout-danger {
+    border-left-color: #d9534f;
+}
+.bs-callout-danger h4 {
+    color: #d9534f;
+}
+.bs-callout-warning {
+    border-left-color: #f0ad4e;
+}
+.bs-callout-warning h4 {
+    color: #f0ad4e;
+}
+.bs-callout-info {
+    border-left-color: #5bc0de;
+}
+.bs-callout-info h4 {
+    color: #5bc0de;
+}
+
+    .fts-price, .fts-bom-item-price {
+      text-align: right;
+    }
+    .fts-bom-item-sku {
+      font-family: monospace;
+    }
+    .fts-expand, .fts-expand:hover, .fts-expand:visited, .fts-expand:focus {
+      text-decoration: none;
+    }
+    .fts-filesize {
+      opacity: 0.5;
+    }
+
+    .fts-assembly h1, .fts-assembly h2, .fts-assembly h3, .fts-assembly h4, .fts-assembly h5, .fts-assembly h6 {
+      margin-top: 0;
+    }
+
+    .fts-not-yet-loaded {
+      opacity: 0.75;
+    }
+
+    .jumbotron {
+      background-size: auto 100%;
+      background-repeat: no-repeat;
+      background-position: right;
+      background-image: url('background.jpg');
+    }
+
+    @media
+(-webkit-min-device-pixel-ratio: 1.5),
+(min-resolution: 144dpi) {
+    .jumbotron {
+      background-image: url('background.2x.jpg');
+    }
+}
+    </style>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="//oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="//oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+
+    <nav class="navbar navbar-default">
+      <div class="container">
+        <div class="navbar-header" style="margin-right: 44px">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <img alt="freetserv" src="logo.svg" border="0" height="40px" width="40px" style="margin-top: 5px">
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse">
+          <ul class="nav navbar-nav">
+	    {% include menulink.html name="introduction" text="Introduction" url="/" %}
+            <li role="presentation" class="dropdown">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Documentation <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+	              {% include menulink.html name="materials" text="Materials" url="/materials.html" %}
+	              {% include menulink.html name="assembly" text="Assembly" url="/assembly.html" %}
+	              {% include menulink.html name="software-setup" text="Software Setup" url="/software-setup.html" %}
+	              {% include menulink.html name="admin-guide" text="Admin Guide" url="/admin-guide.html" %}
+	              {% include menulink.html name="user-guide" text="User Guide" url="/user-guide.html" %}
+                <li><a href="https://goo.gl/photos/mjic4fa3yz9d6P7y8">Pictures</a></li>
+              </ul>
+            </li>
+            <li><a href="https://github.com/freetserv/freetserv">Repository</a></li>
+	    {% include menulink.html name="credits" text="Credits" url="/credits.html" %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    {{ content }}
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js" integrity="sha384-6ePHh72Rl3hKio4HiJ841psfsRJveeS+aLoaEf3BWfS+gTF0XdAqku2ka8VddikM" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    {% if page.scripts != null %}
+    {% include {{ page.scripts }} %}
+    {% endif %}
+  </body>
+</html>
+<!-- vim:ts=2:sw=2:et
+-->

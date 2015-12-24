@@ -1,0 +1,50 @@
+---
+layout: default
+menu-name: admin-guide
+---
+
+    <div class="container">
+    <h1>freetserv Admin Guide</h1>
+
+    <h2>Giving users access to freetserv</h2>
+    <p>
+To create the user account, use <code>fts-adduser</code>, which is <a href="https://github.com/freetserv/freetserv/blob/master/fts-adduser">a wrapper script</a> around <code>adduser(8)</code>:
+</p>
+<pre>
+fts # export NEWUSER=stapelberg
+fts # fts-adduser ${NEWUSER}
+</pre>
+    <p>
+<code>fts-adduser</code> creates accounts without a password, so you will need to configure an authorized SSH key:
+</p>
+<pre>
+fts # install -d -m 700 -o ${NEWUSER} -g users ~${NEWUSER}/.ssh
+fts # install -m 600 -o ${NEWUSER} -g users /dev/stdin ~${NEWUSER}/.ssh/authorized_keys
+# copy&amp;paste public key, terminate using Ctrl-D
+</pre>
+
+<h2>Assigning serial ports to users</h2>
+
+<p>
+By default, all serial ports are owned by <code>nobody</code> with permission <code>600</code> (only the owner can read/write).
+</p>
+
+<p>
+In order to assign a serial port to a user, use <code>fts-port-owner</code>, which is <a href="https://github.com/freetserv/freetserv/blob/master/fts-port-owner">a program that modifies the necessary udev rules</a>:
+</p>
+
+<pre>
+fts # fts-port-owner 1 stapelberg
+</pre>
+
+<p>
+The port numbers that <code>fts-port-owner</code> expects range from 1 to 48 and correspond to <a href="https://goo.gl/photos/ErzYFjzPyrxSFxST7">the labeling on the case</a>.
+</p>
+
+<p>
+In case you want to make a port unavailable again, for example after disconnecting the device on that port, just re-assign it to <code>nobody</code>:
+</p>
+
+<pre>
+fts # fts-port-owner 1 nobody
+</pre>

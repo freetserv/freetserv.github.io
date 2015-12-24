@@ -1,0 +1,174 @@
+---
+layout: default
+menu-name: software-setup
+---
+
+    <div class="container">
+    <h1>Software setup</h1>
+
+    <h2>Installing a Raspberry Pi 2 with Debian</h2>
+    <p>
+See <a href="https://wiki.debian.org/RaspberryPi2">https://wiki.debian.org/RaspberryPi2</a> for details. As of 2015-12, the instructions on that wiki page essential say the following. Mount the microSDHC card on your computer, then download collabora’s Debian image (173 MB) for the Raspberry Pi 2 and copy it onto the microSDHC card, assuming it was recognized by your computer as <code>/dev/sdb</code>:
+</p>
+
+<pre>
+midna $ sudo apt-get install bmap-tools
+midna $ wget https://images.collabora.co.uk/rpi2/jessie-rpi2-20150705.img.{bmap,gz}
+midna $ sudo bmaptool copy jessie-rpi2-20150705.img.gz /dev/sdb
+</pre>
+
+<p>
+Then, put the microSDHC card into your Raspberry Pi 2 and connect it to power and ethernet. Wait for it to show up on your network. 
+</p>
+<ul>
+<li>
+If you are directly connecting the Raspberry Pi 2 to your notebook, using IPv6 link-local addresses is the most convenient. Run <code>ping6 ff02::1%eth0</code>, pick the first duplicate reply that shows up and connect to it: <code>ssh root@fe80::ba27:ebff:fec8:fcfd%eno1</code>.
+</li>
+<li>
+If you connected the Raspberry Pi 2 to an existing network with a DHCP server, look for a DHCP lease for the hostname “jessie-rpi” and connect to it: <code>ssh root@jessie-rpi.lan</code>
+</li>
+</ul>
+<p>
+The root password is “debian”, and you should change it once you’re logged in:
+</p>
+
+<pre>
+jessie-rpi # passwd
+jessie-rpi # hostnamectl set-hostname fts.example.net
+</pre>
+
+<p>
+Install your public key (<a href="https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys--2">DigitalOcean has a good introduction to SSH public keys</a>), then disable password-based login:
+</p>
+
+<pre>
+fts # sed -i 's,#*\s*PasswordAuthentication .*,PasswordAuthentication no,g' /etc/ssh/sshd_config
+</pre>
+
+<h2>Configuring the Raspberry Pi 2 for freetserv</h2>
+
+<pre>
+fts # export FTS_MASTER="https://raw.githubusercontent.com/freetserv/freetserv/master"
+fts # apt-get install minicom cu screen
+</pre>
+
+<p>
+Install the udev rules for stable port numbering, the helper scripts, and an explanatory <abbr title="message of the day">motd</abbr> file which will be displayed when logging in via SSH:
+</p>
+<pre>
+fts # curl ${FTS_MASTER}/udev/freetserv.rules -O /etc/udev/rules.d/freetserv.rules
+fts # curl ${FTS_MASTER}/fts-adduser -O /usr/local/bin/fts-adduser
+fts # curl ${FTS_MASTER}/fts-port-owner -O /usr/local/bin/fts-port-owner
+fts # chmod +x /usr/local/bin/fts-*
+fts # curl ${FTS_MASTER}/motd -O /etc/motd
+</pre>
+
+<p>
+Configure <code>adduser(8)</code> to not create individual groups for new users, making all users end up in the <code>users</code> group.
+</p>
+<pre>
+fts # sed -i 's,^USERGROUPS=yes$,USERGROUPS=no,g' /etc/adduser.conf
+</pre>
+
+<p>
+Install the watchdog script to make the watchdog LED connected to GPIO4 blink for a second every other second:
+</p>
+
+<pre>
+fts # curl ${FTS_MASTER}/watchdog.service -O /etc/systemd/system/watchdog.service
+fts # curl ${FTS_MASTER}/watchdog.sh -O /usr/local/bin/watchdog.sh
+fts # chmod +x /usr/local/bin/watchdog.sh
+fts # systemctl daemon-reload
+fts # systemctl restart watchdog
+fts # systemctl enable watchdog
+</pre>
+<div class="bs-callout bs-callout-default">
+<h4>Nit: avoiding watchdog.sh’s sleep processes</h4>
+<p>
+When running under <code>bash(1)</code>, <code>dash(1)</code> or <code>zsh(1)</code>, the <a href="https://github.com/freetserv/freetserv/blob/master/watchdog.sh">watchdog.sh</a> script spawns a <code>sleep(1)</code> process every second. While that’s not a problem per se, the slight overhead in creating new processes might be enough to make the watchdog LED not blink precisely every other second.
+</p>
+<p>
+If you want to get rid of the external <code>sleep(1)</code> processes, you can run the watchdog script in <code>ksh(1)</code>, which has sleep built-in:
+</p>
+<pre>
+fts # apt-get install ksh
+fts # sed -i 's,/bin/sh,/bin/ksh,g' /usr/local/bin/watchdog.sh
+</pre>
+</div>
+
+<p>
+Enable the Raspberry Pi’s hardware watchdog, so that when the system crashes, it will be rebooted within 10 seconds:
+</p>
+
+<pre>
+fts # echo bcm2708_wdog &gt;&gt; /etc/modules-load.d/raspberry-pi-watchdog.conf
+fts # sed -i 's,^#*\s*RuntimeWatchdogSec=.*,RuntimeWatchdogSec=20s,g' /etc/systemd/system.conf
+</pre>
+
+<p>
+See <a href="/admin-guide.html">the Admin Guide</a> for how to use the newly installed fts-adduser and fts-port-owner scripts.
+</p>
+
+<h2>Making the system read-only (optional)</h2>
+
+<p>
+Experience has shown how the first part of an embedded system that fails often is the storage medium, e.g. a <a href="https://en.wikipedia.org/wiki/CompactFlash">CompactFlash</a> card back in the days, or a microSDHC card in the specific case of a Raspberry Pi 2. Hence, I like to reduce the number of write cycles on the storage medium as much as possible, and therefore run my embedded devices with their root file system mounted read-only.
+</p>
+
+<p>
+Mount the microSDHC card in a card-reader on a different computer. This is necessary because we need the file system of the Raspberry Pi to not be in use while we perform these steps.
+</p>
+
+<p>
+Create a new 1G partition to be mounted read-writeable for <code>/home</code>:
+</p>
+
+<pre>
+midna $ echo '- 1G - -' | sudo sfdisk --append /dev/sdb
+midna $ sudo mkfs.ext4 /dev/sdb3
+midna $ pmount sdb2
+
+midna # cat &gt;/media/sdb2/etc/fstab &lt;&lt;'EOF'
+/dev/mmcblk0p2 / ext4 ro,relatime,errors=remount-ro,discard 0 1
+/dev/mmcblk0p1 /boot/firmware vfat defaults 0 2 
+/dev/mmcblk0p3 /home ext4 relatime,errors=remount-ro,discard 0 1
+tmpfs /tmp tmpfs defaults 0 0
+EOF
+
+midna # cat &gt;/media/sdb2/etc/systemd/system/var.mount &lt;&lt;'EOF'
+[Unit]
+Before=local-fs.target
+
+[Mount]
+What=tmpfs
+Where=/var
+Type=tmpfs
+Options=noatime
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+midna # cat &gt;/media/sdb2/etc/systemd/system/copyvar.service &lt;&lt;'EOF'
+[Unit]
+Description=Copies /var.ro/* to /var
+After=var.mount
+Before=ifupdown.service local-fs.target
+DefaultDependencies=no
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/find /var.ro -mindepth 1 -maxdepth 1 -exec /bin/cp -r '{}' '/var' \073
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+midna # ln -s /media/sdb2/etc/systemd/system/var.mount /media/sdb2/etc/systemd/system/multi-user.target.wants/var.mount
+midna # ln -s /media/sdb2/etc/systemd/system/copyvar.service /media/sdb2/etc/systemd/system/multi-user.target.wants/copyvar.service
+midna # mv /media/sdb2/var /media/sdb2/var.ro
+midna # mkdir /media/sdb2/var
+midna $ pumount sdb2
+</pre>
+
+    </div>
