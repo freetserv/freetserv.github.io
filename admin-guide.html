@@ -18,8 +18,8 @@ fts # fts-adduser ${NEWUSER}
 <code>fts-adduser</code> creates accounts without a password, so you will need to configure an authorized SSH key:
 </p>
 <pre>
-fts # install -d -m 700 -o ${NEWUSER} -g users ~${NEWUSER}/.ssh
-fts # install -m 600 -o ${NEWUSER} -g users /dev/stdin ~${NEWUSER}/.ssh/authorized_keys
+fts # install -d -m 700 -o ${NEWUSER} -g users /home/${NEWUSER}/.ssh
+fts # install -m 600 -o ${NEWUSER} -g users /dev/stdin /home/${NEWUSER}/.ssh/authorized_keys
 # copy&amp;paste public key, terminate using Ctrl-D
 </pre>
 
