@@ -3,7 +3,7 @@
 // Licensed under the Apache 2.0 license,
 // see https://www.apache.org/licenses/LICENSE-2.0.txt
 
-var octopart_match = 'https://zoctopart.zekjur.net/api/v3/parts/match?callback=?';
+var octopart_match = 'https://zoctopart.zekjur.net/api/v3/parts/match';
 
 function errorEl(message) {
     return $('<span></span>')
@@ -61,90 +61,96 @@ function bom(suffix) {
             ],
         };
 
-        $.getJSON(octopart_match, args, function(response) {
-            var newRows;
-            $.each(response['results'], function(i, result) {
-                $.each(result['items'], function(j, item) {
-                    var sku = response['request']['queries'][i]['sku'];
-                    var amount = amounts[sku] * multiplier;
-                    var amountSingle = amounts[sku];
-                    var error;
-                    var bestPrice;
-                    var available = false;
-                    $.each(item['offers'], function(k, offer) {
-                        if (offer['seller']['name'] !== 'Digi-Key') {
-                            return;
-                        }
-                        available = true;
-                        $.each(offer['prices'], function(currency, prices) {
-                            $.each(prices, function(l, price) {
-                                if (price[0] <= amount && (bestPrice === undefined || price[0] > bestPrice.amount)) {
-                                    bestPrice = {
-                                        "amount": price[0],
-                                        "price": price[1],
-                                        "currency": currency,
-                                    };
-                                }
+        $.ajax({
+	    dataType: "json",
+	    cache: true,
+	    url: octopart_match,
+	    data: args,
+	    success: function(response) {
+		var newRows;
+		$.each(response['results'], function(i, result) {
+                    $.each(result['items'], function(j, item) {
+			var sku = response['request']['queries'][i]['sku'];
+			var amount = amounts[sku] * multiplier;
+			var amountSingle = amounts[sku];
+			var error;
+			var bestPrice;
+			var available = false;
+			$.each(item['offers'], function(k, offer) {
+                            if (offer['seller']['name'] !== 'Digi-Key') {
+				return;
+                            }
+                            available = true;
+                            $.each(offer['prices'], function(currency, prices) {
+				$.each(prices, function(l, price) {
+                                    if (price[0] <= amount && (bestPrice === undefined || price[0] > bestPrice.amount)) {
+					bestPrice = {
+                                            "amount": price[0],
+                                            "price": price[1],
+                                            "currency": currency,
+					};
+                                    }
+				});
                             });
-                        });
+			});
+
+			var el = $('tr[data-sku="' + sku + '"]');
+			el.children('.fts-bom-item-item')
+			    .html(
+				$('<span class="manufacturer"></span>')
+				    .text(item['manufacturer']['name'])
+				    .append(' ')
+				    .append(
+					$('<abbr></abbr>').text(item['mpn']).attr('title', item['short_description'])));
+			el.children('.fts-bom-item-sku')
+                            .html(
+				$('<a></a>')
+				    .attr('href', 'https://www.digikey.com/product-search/en?keywords=' + encodeURIComponent(sku))
+				    .text(sku));
+			if (!available) {
+                            el.find('span.manufacturer').before(
+				errorEl('This part might not be sold by Digi-Key anymore.'));
+			}
+
+			if (bestPrice !== undefined) {
+                            var price = (amount * bestPrice.price).toFixed(2);
+                            totalPrice.price += (amount * bestPrice.price);
+                            if (totalPrice.currency === undefined) {
+				totalPrice.currency = bestPrice.currency;
+                            } else if (totalPrice.currency !== bestPrice.currency) {
+				// TODO: display a warning, not all currencies were the same, hence the total is not accurate :(
+                            }
+                            el.find('.fts-bom-item-price')
+				.attr('data-total', price)
+				.text(price + ' ' + bestPrice.currency);
+			} else {
+                            el.find('span.manufacturer').before(
+				errorEl('Could not determine pricing information'));
+			}
+
+			$(el).removeClass('fts-not-yet-loaded');
                     });
+		});
 
-                    var el = $('tr[data-sku="' + sku + '"]');
-                    el.children('.fts-bom-item-item')
-                      .html(
-                        $('<span class="manufacturer"></span>')
-                          .text(item['manufacturer']['name'])
-                        .append(' ')
-                        .append(
-                          $('<abbr></abbr>').text(item['mpn']).attr('title', item['short_description'])));
-                    el.children('.fts-bom-item-sku')
-                        .html(
-                            $('<a></a>')
-                            .attr('href', 'https://www.digikey.com/product-search/en?keywords=' + encodeURIComponent(sku))
-                            .text(sku));
-                    if (!available) {
-                        el.find('span.manufacturer').before(
-                            errorEl('This part might not be sold by Digi-Key anymore.'));
-                    }
+		// Append the new BOM table rows to the table (sorted!)
+		var rows = $(tableId + ' tbody > tr').detach();
+		rows.sort(function(a, b) {
+                    return parseFloat($(b).find('td[data-total]').attr('data-total')) -
+			parseFloat($(a).find('td[data-total]').attr('data-total'));
+		});
+		rows.appendTo(tableId);
 
-                    if (bestPrice !== undefined) {
-                        var price = (amount * bestPrice.price).toFixed(2);
-                        totalPrice.price += (amount * bestPrice.price);
-                        if (totalPrice.currency === undefined) {
-                            totalPrice.currency = bestPrice.currency;
-                        } else if (totalPrice.currency !== bestPrice.currency) {
-                            // TODO: display a warning, not all currencies were the same, hence the total is not accurate :(
-                        }
-                        el.find('.fts-bom-item-price')
-                          .attr('data-total', price)
-                          .text(price + ' ' + bestPrice.currency);
-                    } else {
-                        el.find('span.manufacturer').before(
-                            errorEl('Could not determine pricing information'));
-                    }
-
-                    $(el).removeClass('fts-not-yet-loaded');
-                });
-            });
-
-            // Append the new BOM table rows to the table (sorted!)
-            var rows = $(tableId + ' tbody > tr').detach();
-            rows.sort(function(a, b) {
-                return parseFloat($(b).find('td[data-total]').attr('data-total')) -
-                    parseFloat($(a).find('td[data-total]').attr('data-total'));
-            });
-            rows.appendTo(tableId);
-
-            // Update total price now that we have the BOM list.
-            $(totalRowId)
-            .find('td.fts-price-total')
-            .attr('data-total', totalPrice.price.toFixed(2) + ' ' + totalPrice.currency)
-            .html(totalPrice.price.toFixed(2) + ' ' + totalPrice.currency + '<span class="spinner"></span>');
-            if ($('#fts-bom-' + suffix + ' tr[data-sku].fts-not-yet-loaded').size() > 0) {
-                indicateProgress($('#fts-' + suffix + ' .fts-price .spinner')[0]);
-            }
-            updateDownloadLinks();
-            updateTotalPrice();
-        });
+		// Update total price now that we have the BOM list.
+		$(totalRowId)
+		    .find('td.fts-price-total')
+		    .attr('data-total', totalPrice.price.toFixed(2) + ' ' + totalPrice.currency)
+		    .html(totalPrice.price.toFixed(2) + ' ' + totalPrice.currency + '<span class="spinner"></span>');
+		if ($('#fts-bom-' + suffix + ' tr[data-sku].fts-not-yet-loaded').size() > 0) {
+                    indicateProgress($('#fts-' + suffix + ' .fts-price .spinner')[0]);
+		}
+		updateDownloadLinks();
+		updateTotalPrice();
+            },
+	});
     }
 }
