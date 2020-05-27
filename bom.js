@@ -3,7 +3,7 @@
 // Licensed under the Apache 2.0 license,
 // see https://www.apache.org/licenses/LICENSE-2.0.txt
 
-var octopart_match = 'https://octopart.com/api/v3/parts/match?callback=?';
+var octopart_match = 'https://zoctopart.zekjur.net/api/v3/parts/match?callback=?';
 
 function errorEl(message) {
     return $('<span></span>')
@@ -51,7 +51,6 @@ function bom(suffix) {
         var args = {
             'queries': JSON.stringify(queries),
             'exact_only': true,
-            'apikey': '8f6c77a4',
             'include[]': 'short_description',
             'show[]': [
                 'mpn',
