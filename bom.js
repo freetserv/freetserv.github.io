@@ -3,7 +3,7 @@
 // Licensed under the Apache 2.0 license,
 // see https://www.apache.org/licenses/LICENSE-2.0.txt
 
-var octopart_match = 'https://zoctopart.zekjur.net/api/v3/parts/match';
+var octopart_match = 'https://zoctopart.zekjur.net/api/v4/rest/parts/match';
 
 function errorEl(message) {
     return $('<span></span>')
